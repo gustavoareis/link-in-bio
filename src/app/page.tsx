@@ -240,7 +240,7 @@ export default function Home() {
                 max={duration > 0 ? duration : 1}
                 step={0.01}
                 value={currentTime}
-                onChange={(event) =>
+                onInput={(event) =>
                   handleSeek(Number(event.currentTarget.value))
                 }
                 aria-label="Progresso da música"

@@ -281,7 +281,7 @@ main {
 .progress-fill {
   width: var(--progress);
   background: var(--progress-color);
-  transition: width 180ms linear, background-color 180ms ease;
+  transition: background-color 180ms ease;
 }
 
 .progress-input {
