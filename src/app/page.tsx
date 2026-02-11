@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 function formatTime(value: number) {
   if (!Number.isFinite(value) || value <= 0) {
@@ -29,10 +29,16 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(0.2);
   const [bgActive, setBgActive] = useState<"a" | "b">("a");
   const [bgA, setBgA] = useState(tracks[0].cover);
   const [bgB, setBgB] = useState(tracks[0].cover);
+  const [coverA, setCoverA] = useState(tracks[0].cover);
+  const [coverB, setCoverB] = useState(tracks[0].cover);
   const currentTrack = tracks[trackIndex];
+  const progressPercent =
+    duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
+  const volumePercent = Math.round(volume * 100);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -47,6 +53,7 @@ export default function Home() {
     audio.addEventListener("loadedmetadata", handleLoaded);
     audio.addEventListener("timeupdate", handleTime);
     audio.addEventListener("ended", handleEnded);
+    audio.volume = volume;
 
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoaded);
@@ -74,12 +81,20 @@ export default function Home() {
       const next = prev === "a" ? "b" : "a";
       if (next === "a") {
         setBgA(currentTrack.cover);
+        setCoverA(currentTrack.cover);
       } else {
         setBgB(currentTrack.cover);
+        setCoverB(currentTrack.cover);
       }
       return next;
     });
   }, [trackIndex, currentTrack.cover]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+  }, [volume]);
 
   const togglePlay = async () => {
     const audio = audioRef.current;
@@ -104,6 +119,11 @@ export default function Home() {
     if (!audio) return;
     audio.currentTime = value;
     setCurrentTime(value);
+  };
+
+  const handleVolumeChange = (value: number) => {
+    const clamped = Math.min(1, Math.max(0, value / 100));
+    setVolume(clamped);
   };
 
   const handlePrevious = () => {
@@ -140,7 +160,7 @@ export default function Home() {
       </div>
 
       <section className="card">
-        <img className="avatar" src="/cat01.jpg" alt="Foto de perfil" />
+        <img className="avatar" src="/cat02.jpg" alt="Foto de perfil" />
         <div className="identity">
           <h1>tizil</h1>
           <div className="location">
@@ -152,12 +172,21 @@ export default function Home() {
         </div>
 
         <div className="socials">
-          <div className="social-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M19.52 5.17A18.3 18.3 0 0 0 14.98 4a12.9 12.9 0 0 0-.6 1.23 17.5 17.5 0 0 0-4.76 0A12.9 12.9 0 0 0 9.02 4a18.3 18.3 0 0 0-4.54 1.17C2.2 8.3 1.6 11.34 1.8 14.33a18.3 18.3 0 0 0 5.57 2.89c.47-.64.9-1.32 1.27-2.04-.7-.26-1.36-.58-1.98-.97.17-.12.33-.26.5-.39a12.7 12.7 0 0 0 11.68 0c.17.13.33.27.5.39-.62.39-1.29.71-1.98.97.37.72.8 1.4 1.27 2.04a18.3 18.3 0 0 0 5.57-2.89c.22-3.34-.38-6.37-2.18-9.16Zm-9.4 7.59c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.57 1.78 0 .98-.69 1.78-1.57 1.78Zm5.76 0c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.57 1.78 0 .98-.69 1.78-1.57 1.78Z" />
+          <a
+            className="social-item link"
+            href="https://discord.com/users/1064312764174176298"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg
+              className="discord-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M20.317 4.369a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 13.903 13.903 0 0 0-.604 1.26 18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.26.074.074 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.069.069 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.026c.461-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.076.076 0 0 1-.008-.127c.126-.095.252-.192.371-.291a.074.074 0 0 1 .078-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.099.245.197.371.291a.076.076 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.891.077.077 0 0 0-.041.106c.359.698.771 1.363 1.226 1.994a.076.076 0 0 0 .084.026 19.9 19.9 0 0 0 6.002-3.03.077.077 0 0 0 .031-.056c.5-5.177-.839-9.673-3.548-13.661a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.093 2.156 2.419 0 1.334-.955 2.418-2.156 2.418Zm7.975 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.093 2.156 2.419 0 1.334-.946 2.418-2.156 2.418Z" />
             </svg>
             <span>gustavotizil</span>
-          </div>
+          </a>
 
           <a
             className="social-item link"
@@ -174,26 +203,49 @@ export default function Home() {
       </section>
 
       <section className="player">
-        <img
-          className="cover"
-          src={currentTrack.cover}
-          alt="Capa da música"
-        />
+        <div className="cover-stack" aria-hidden="true">
+          <img
+            className={`cover-image ${
+              bgActive === "a" ? "is-active" : ""
+            }`}
+            src={coverA}
+            alt=""
+          />
+          <img
+            className={`cover-image ${
+              bgActive === "b" ? "is-active" : ""
+            }`}
+            src={coverB}
+            alt=""
+          />
+        </div>
         <div className="track">
           <div className="track-title">{currentTrack.title}</div>
           <div className="track-row">
             <span className="time">{formatTime(currentTime)}</span>
-            <input
-              type="range"
-              min={0}
-              max={duration > 0 ? duration : 1}
-              step={0.01}
-              value={currentTime}
-              onChange={(event) =>
-                handleSeek(Number(event.currentTarget.value))
+            <div
+              className="progress"
+              style={
+                {
+                  "--progress": `${progressPercent}%`,
+                } as CSSProperties
               }
-              aria-label="Progresso da música"
-            />
+            >
+              <div className="progress-track" aria-hidden="true" />
+              <div className="progress-fill" aria-hidden="true" />
+              <input
+                className="progress-input"
+                type="range"
+                min={0}
+                max={duration > 0 ? duration : 1}
+                step={0.01}
+                value={currentTime}
+                onChange={(event) =>
+                  handleSeek(Number(event.currentTarget.value))
+                }
+                aria-label="Progresso da música"
+              />
+            </div>
             <span className="time">{formatTime(duration)}</span>
           </div>
         </div>
@@ -236,6 +288,39 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      <div className="volume-widget">
+        <svg
+          className="volume-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M3 9v6h4l5 5V4L7 9H3Zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02ZM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77Z" />
+        </svg>
+        <div
+          className="volume-bar"
+          style={
+            {
+              "--volume": `${volumePercent}%`,
+            } as CSSProperties
+          }
+        >
+          <div className="volume-track" aria-hidden="true" />
+          <div className="volume-fill" aria-hidden="true" />
+          <input
+            className="volume-input"
+            type="range"
+            min={0}
+            max={100}
+            step={1}
+            value={volumePercent}
+            onChange={(event) =>
+              handleVolumeChange(Number(event.currentTarget.value))
+            }
+            aria-label="Volume"
+          />
+        </div>
+      </div>
 
       <audio
         ref={audioRef}
