@@ -15,14 +15,64 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const tracks = [
     {
-      title: "Nope your too late",
+      title: "Nope Your Too Late",
       src: "/audio/nope-your-too-late.mp3",
       cover: "/covers/nope-your-too-late.jpg",
     },
     {
-      title: "fall",
+      title: "Fall",
       src: "/audio/fall.mp3",
       cover: "/covers/fall.jpg",
+    },
+    {
+      title: "Dear God",
+      src: "/audio/dear-god.mp3",
+      cover: "/covers/dear-god.jpg",
+    },
+    {
+      title: "I Need Some Sleep",
+      src: "/audio/i-need-some-sleep.mp3",
+      cover: "/covers/i-need-some-sleep.jpg",
+    },
+    {
+      title: "Linger",
+      src: "/audio/linger.mp3",
+      cover: "/covers/linger.jpg",
+    },
+    {
+      title: "Lover Is A Day",
+      src: "/audio/lover-is-a-day.mp3",
+      cover: "/covers/lover-is-a-day.jpg",
+    },
+    {
+      title: "No Surprises",
+      src: "/audio/no-surprises.mp3",
+      cover: "/covers/no-surprises.jpg",
+    },
+    {
+      title: "Nothings New",
+      src: "/audio/nothings-new.mp3",
+      cover: "/covers/nothings-new.jpg",
+    },
+    {
+      title: "Otis Linger",
+      src: "/audio/otis-linger.mp3",
+      cover: "/covers/otis-linger.jpg",
+    },
+    {
+      title: "The Only Exeption",
+      src: "/audio/the-only-exeption.mp3",
+      cover: "/covers/the-only-exeption.jpg",
+    },
+    {
+      title: "Welcome And Goodbye",
+      src: "/audio/welcome-and-goodbye.mp3",
+      cover: "/covers/welcome-and-goodbye.jpg",
+    },
+    {
+      title: "When The Sun Hits",
+      src: "/audio/when-the-sun-hits.mp3",
+      cover: "/covers/when-the-sun-hits.jpg",
     },
   ];
   const [trackIndex, setTrackIndex] = useState(0);
